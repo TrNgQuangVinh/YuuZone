@@ -1,0 +1,1 @@
+﻿And don't commit the appsettings.json (should already be ignored) especially if it has secrets
