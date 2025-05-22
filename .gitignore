@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /YuuZone/appsettings.json
 /YuuZone/appsettings.Development.json
+/YuuZone/appsettings.json
+/YuuZone/appsettings.Development.json
