@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YuuZone", "YuuZone\YuuZone.csproj", "{37BC163B-43A3-45F0-AA35-96FFF254CBB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{FE646A74-2E28-4D59-9ABF-80E6167FC8BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{966481BE-8C9D-4CB5-A17C-C9225382661D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37BC163B-43A3-45F0-AA35-96FFF254CBB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37BC163B-43A3-45F0-AA35-96FFF254CBB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37BC163B-43A3-45F0-AA35-96FFF254CBB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37BC163B-43A3-45F0-AA35-96FFF254CBB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE646A74-2E28-4D59-9ABF-80E6167FC8BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE646A74-2E28-4D59-9ABF-80E6167FC8BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE646A74-2E28-4D59-9ABF-80E6167FC8BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE646A74-2E28-4D59-9ABF-80E6167FC8BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{966481BE-8C9D-4CB5-A17C-C9225382661D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966481BE-8C9D-4CB5-A17C-C9225382661D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966481BE-8C9D-4CB5-A17C-C9225382661D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966481BE-8C9D-4CB5-A17C-C9225382661D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E58AB108-36DB-4068-BEBC-F973FE519A5B}
+	EndGlobalSection
+EndGlobal
