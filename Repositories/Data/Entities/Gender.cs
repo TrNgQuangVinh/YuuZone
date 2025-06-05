@@ -12,7 +12,7 @@ namespace Repositories.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int GenderTitle { get; set; }
+        public string GenderTitle { get; set; }
 
         public virtual ICollection<User>? Users { get; set; }
     }
