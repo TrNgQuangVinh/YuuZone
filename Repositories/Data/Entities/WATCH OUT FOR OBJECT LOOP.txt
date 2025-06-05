@@ -1,0 +1,1 @@
+﻿Community has Tags. Tags lead to Community (will loop if you dont use DTO)

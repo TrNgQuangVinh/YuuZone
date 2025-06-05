@@ -23,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Repository\Implementation\" />
+    <Folder Include="DTO\" />
   </ItemGroup>
 
 </Project>
