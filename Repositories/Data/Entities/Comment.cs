@@ -11,7 +11,7 @@ namespace Repository.Data.Entities
     public class Comment
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Content { get; set; }
         public DateTime PostedDate { get; set; }
         public string UserId { get; set; }
