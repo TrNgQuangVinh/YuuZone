@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Repositories.Data
 {
     public class YuuZoneDbContext : DbContext
-    { 
+    {
         public YuuZoneDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -26,6 +26,7 @@ namespace Repositories.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Status> Statuses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,6 +71,24 @@ namespace Repositories.Data
             modelBuilder.Entity<Community>()
                 .HasMany(c => c.Tags)
                 .WithMany(c => c.Communities);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Status)
+                .WithMany()
+                .HasForeignKey(u => u.StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.Status)
+                .WithMany()
+                .HasForeignKey(p => p.StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Community>()
+                .HasOne(c => c.Status)
+                .WithMany()
+                .HasForeignKey(c => c.StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -31,8 +31,10 @@ namespace Repository.Data.Entities
         public int RoleId { get; set; }
         [Required]
         public int GenderId { get; set; }
-        public string? Status { get; set; }
+        public int StatusId { get; set; }
 
+        [ForeignKey("StatusId")]
+        public Status Status { get; set; }
         [ForeignKey("RoleId")]
         public Role? Role { get; set; }
         [ForeignKey("GenderId")]

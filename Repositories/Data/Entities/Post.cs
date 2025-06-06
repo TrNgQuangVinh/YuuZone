@@ -19,7 +19,10 @@ namespace Repository.Data.Entities
         public string CommunityId { get; set; }
         public DateTime PostedDate { get; set; }
         public DateTime UpdateDate { get; set; }
+        public int StatusId { get; set; }
 
+        [ForeignKey("StatusId")]
+        public Status Status { get; set; }
         [ForeignKey("UserId")]
         public User? Author { get; set; }
         [ForeignKey("CommunityId")]
