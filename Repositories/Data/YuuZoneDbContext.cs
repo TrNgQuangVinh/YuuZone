@@ -32,6 +32,26 @@ namespace Repositories.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Seeding Roles
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, Name = "Admin" },
+                new Role { Id = 2, Name = "Customer" }
+            );
+
+            // Seeding Genders
+            modelBuilder.Entity<Gender>().HasData(
+                new Gender { Id = 1, GenderTitle = "Male" },
+                new Gender { Id = 2, GenderTitle = "Female" },
+                new Gender { Id = 3, GenderTitle = "Other" }
+            );
+
+            // Seeding Statuses
+            modelBuilder.Entity<Status>().HasData(
+                new Status { Id = 1, StatusName = "Active" },
+                new Status { Id = 2, StatusName = "Inactive" },
+                new Status { Id = 3, StatusName = "Pending" }
+            );
+
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
                 .WithMany(u => u.Users)

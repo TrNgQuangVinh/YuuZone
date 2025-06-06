@@ -12,7 +12,7 @@ namespace Repository.Data.Entities
     public class User
     {
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public string Username { get; set; }
         public string? TitleName { get; set; }

@@ -12,7 +12,7 @@ using Repositories.Data;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(YuuZoneDbContext))]
-    [Migration("20250606164109_FirstMigration")]
+    [Migration("20250606175206_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -27,8 +27,8 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("CommunityTag", b =>
                 {
-                    b.Property<string>("CommunitiesId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("CommunitiesId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TagsId")
                         .HasColumnType("nvarchar(450)");
@@ -42,8 +42,9 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -128,23 +129,22 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repository.Data.Entities.Comment", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("PostedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -157,12 +157,12 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repository.Data.Entities.Post", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CommunityId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -181,9 +181,8 @@ namespace Repositories.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -215,8 +214,9 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repository.Data.Entities.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
