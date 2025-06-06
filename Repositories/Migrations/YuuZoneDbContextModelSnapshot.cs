@@ -24,8 +24,8 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("CommunityTag", b =>
                 {
-                    b.Property<string>("CommunitiesId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("CommunitiesId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TagsId")
                         .HasColumnType("nvarchar(450)");
@@ -39,8 +39,9 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -65,11 +66,12 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Communities");
                 });
@@ -89,6 +91,57 @@ namespace Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            GenderTitle = "Male"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            GenderTitle = "Female"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            GenderTitle = "Other"
+                        });
+                });
+
+            modelBuilder.Entity("Repositories.Data.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("StatusName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            StatusName = "Active"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            StatusName = "Inactive"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            StatusName = "Pending"
+                        });
                 });
 
             modelBuilder.Entity("Repositories.Data.Entities.Tag", b =>
@@ -107,23 +160,22 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repository.Data.Entities.Comment", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("PostedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -136,12 +188,12 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repository.Data.Entities.Post", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CommunityId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -150,6 +202,9 @@ namespace Repositories.Migrations
                     b.Property<DateTime>("PostedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -157,13 +212,14 @@ namespace Repositories.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommunityId");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
 
@@ -185,12 +241,25 @@ namespace Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Customer"
+                        });
                 });
 
             modelBuilder.Entity("Repository.Data.Entities.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -222,8 +291,8 @@ namespace Repositories.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
 
                     b.Property<string>("TitleName")
                         .HasColumnType("nvarchar(max)");
@@ -237,6 +306,8 @@ namespace Repositories.Migrations
                     b.HasIndex("GenderId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Users");
                 });
@@ -254,6 +325,17 @@ namespace Repositories.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
+                {
+                    b.HasOne("Repositories.Data.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Repository.Data.Entities.Comment", b =>
@@ -283,6 +365,12 @@ namespace Repositories.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Repositories.Data.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Repository.Data.Entities.User", "Author")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
@@ -292,6 +380,8 @@ namespace Repositories.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Community");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Repository.Data.Entities.User", b =>
@@ -308,9 +398,17 @@ namespace Repositories.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Repositories.Data.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Gender");
 
                     b.Navigation("Role");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>

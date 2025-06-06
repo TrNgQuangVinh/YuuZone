@@ -12,14 +12,17 @@ namespace Repository.Data.Entities
     public class Post
     {
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Subject { get; set; }
         public string Content { get; set; }
-        public string UserId { get; set; }
-        public string CommunityId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid CommunityId { get; set; }
         public DateTime PostedDate { get; set; }
         public DateTime UpdateDate { get; set; }
+        public int StatusId { get; set; }
 
+        [ForeignKey("StatusId")]
+        public Status Status { get; set; }
         [ForeignKey("UserId")]
         public User? Author { get; set; }
         [ForeignKey("CommunityId")]

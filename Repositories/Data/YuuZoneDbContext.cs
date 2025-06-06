@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Repositories.Data
 {
     public class YuuZoneDbContext : DbContext
-    { 
+    {
         public YuuZoneDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -26,10 +26,31 @@ namespace Repositories.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Status> Statuses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Seeding Roles
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, Name = "Admin" },
+                new Role { Id = 2, Name = "Customer" }
+            );
+
+            // Seeding Genders
+            modelBuilder.Entity<Gender>().HasData(
+                new Gender { Id = 1, GenderTitle = "Male" },
+                new Gender { Id = 2, GenderTitle = "Female" },
+                new Gender { Id = 3, GenderTitle = "Other" }
+            );
+
+            // Seeding Statuses
+            modelBuilder.Entity<Status>().HasData(
+                new Status { Id = 1, StatusName = "Active" },
+                new Status { Id = 2, StatusName = "Inactive" },
+                new Status { Id = 3, StatusName = "Pending" }
+            );
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
@@ -70,6 +91,24 @@ namespace Repositories.Data
             modelBuilder.Entity<Community>()
                 .HasMany(c => c.Tags)
                 .WithMany(c => c.Communities);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Status)
+                .WithMany()
+                .HasForeignKey(u => u.StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.Status)
+                .WithMany()
+                .HasForeignKey(p => p.StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Community>()
+                .HasOne(c => c.Status)
+                .WithMany()
+                .HasForeignKey(c => c.StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
