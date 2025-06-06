@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories.Data;
+using Repositories.Repository;
+using Repositories.Repository.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,9 @@ namespace Repositories.Base
         {
             service.AddDbContext<YuuZoneDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            service.AddScoped<IAuthenRepository, AuthenRepository>();
+            service.AddScoped<IUserRepository, UserRepository>();
             return service;
         }
     }

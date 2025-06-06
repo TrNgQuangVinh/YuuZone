@@ -22,22 +22,20 @@ namespace Repositories.Base
         Task<T?> GetByIdAsync(Guid code);
 
         // ========== CREATE ==========
-        void Create(T entity);
+        int Create(T entity);
         Task<int> CreateAsync(T entity);
-        Task Add(T entity);
-        Task Add(IEnumerable<T> entities);
+
+        int Create(IEnumerable<T> entities);
+        Task<int> CreateAsync(IEnumerable<T> entities);
 
         // ========== UPDATE ==========
-        void Update(T entity);
+        int Update(T entity);
         Task<int> UpdateAsync(T entity);
-        Task Update(IEnumerable<T> entities);
+        Task<T> UpdateAsyncReturnItem(T entity);
 
         // ========== DELETE ==========
         bool Remove(T entity);
         Task<bool> RemoveAsync(T? entity);
-        void Remove(int id);
-        void Remove(params T[] entities);
-        void Remove(IEnumerable<T> entities);
     }
 
 }

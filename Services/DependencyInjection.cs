@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Repositories.Extension;
+using Services.Service;
+using Services.Service.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,8 @@ namespace Services
     {
         public static IServiceCollection AddServices(this IServiceCollection service, IConfiguration configuration)
         {
+            service.AddScoped<IAuthenService, AuthenService>();
+            service.AddAutoMapper(typeof(AutoMapperProfile));
             return service;
         }
     }

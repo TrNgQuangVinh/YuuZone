@@ -29,8 +29,9 @@ namespace Repositories.Constant
         public enum StatusID
         {
             ACTIVE = 1,
-            PENDING = 2,
-            INACTIVE = 3
+            INACTIVE = 2,
+            PENDING = 3
+            
         }
     }
 }

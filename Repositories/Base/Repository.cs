@@ -10,7 +10,7 @@ namespace Repositories.Base
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly YuuZoneDbContext _dbContext;
+        protected readonly YuuZoneDbContext _dbContext;
         public DbSet<T> Entities { get; }
 
         public Repository(YuuZoneDbContext dbContext)
@@ -73,10 +73,10 @@ namespace Repositories.Base
         }
 
         // ========== CREATE ==========
-        public void Create(T entity)
+        public int Create(T entity)
         {
             Entities.Add(entity);
-            _dbContext.SaveChanges();
+            return _dbContext.SaveChanges();
         }
 
         public async Task<int> CreateAsync(T entity)
@@ -85,23 +85,23 @@ namespace Repositories.Base
             return await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Add(T entity)
-        {
-            Entities.Add(entity);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task Add(IEnumerable<T> entities)
+        public int Create(IEnumerable<T> entities)
         {
             Entities.AddRange(entities);
-            await _dbContext.SaveChangesAsync();
+            return _dbContext.SaveChanges();
+        }
+
+        public async Task<int> CreateAsync(IEnumerable<T> entities)
+        {
+            Entities.AddRange(entities);
+            return await _dbContext.SaveChangesAsync();
         }
 
         // ========== UPDATE ==========
-        public void Update(T entity)
+        public int Update(T entity)
         {
             _dbContext.Attach(entity).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            return _dbContext.SaveChanges();
         }
 
         public async Task<int> UpdateAsync(T entity)
@@ -110,10 +110,11 @@ namespace Repositories.Base
             return await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(IEnumerable<T> entities)
+        public async Task<T> UpdateAsyncReturnItem(T entity)
         {
-            Entities.UpdateRange(entities);
+            _dbContext.Attach(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
         // ========== DELETE ==========
@@ -131,26 +132,5 @@ namespace Repositories.Base
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
-        public void Remove(int id)
-        {
-            var entity = GetById(id);
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
-            Entities.Remove(entity);
-        }
-
-        public void Remove(params T[] entities)
-        {
-            if (entities == null) throw new ArgumentNullException(nameof(entities));
-            Entities.RemoveRange(entities);
-        }
-
-        public void Remove(IEnumerable<T> entities)
-        {
-            if (entities == null) throw new ArgumentNullException(nameof(entities));
-            Entities.RemoveRange(entities);
-        }
     }
-
-
 }
