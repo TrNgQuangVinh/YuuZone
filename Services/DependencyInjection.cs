@@ -16,6 +16,7 @@ namespace Services
         public static IServiceCollection AddServices(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddScoped<IAuthenService, AuthenService>();
+            service.AddScoped<IUserService, UserService>();
             service.AddAutoMapper(typeof(AutoMapperProfile));
             return service;
         }
