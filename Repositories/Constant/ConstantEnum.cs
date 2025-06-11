@@ -8,6 +8,12 @@ namespace Repositories.Constant
 {
     public static class ConstantEnum
     {
+        public static class RepoStatus
+        {
+            public const string SUCCESS = "Success";
+            public const string FAILURE = "Failure";
+        }
+
         public static class Roles
         {
             public const string ADMIN = "Admin";
@@ -26,12 +32,18 @@ namespace Repositories.Constant
             ADMIN = 1,
             CUSTOMER = 2
         }
+
+        public enum InternalStatusID
+        {
+            SUCCESS = 0,
+            FAILURE = -1
+        }
+
         public enum StatusID
         {
             ACTIVE = 1,
             INACTIVE = 2,
             PENDING = 3
-            
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using Repositories.Base;
+using Repositories.Constant;
 using Repositories.DTO.RequestDTO;
 using Repositories.DTO.ResponseDTO;
 using Repositories.Repository;
@@ -14,12 +16,12 @@ namespace Services.Service.Implementation
 {
     public class AuthenService : IAuthenService
     {
-        private readonly IAuthenRepository _repo;
+        private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public AuthenService(IAuthenRepository repo, IMapper mapper)
+        public AuthenService(UnitOfWork unitOfWork, IMapper mapper)
         {
-            _repo = repo;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -27,17 +29,32 @@ namespace Services.Service.Implementation
         {
             if (input.IsNullOrEmpty())
                 return null;
-            var user = await _repo.Login(input, password);
+            var user = await _unitOfWork._authRepo.Login(input, password);
             return _mapper.Map<UserPostRegView>(user);
         }
 
-        public async Task<(int status,UserPostRegView? user)> Register(RegisterUserForm regUser)
+        public async Task<(string status,UserPostRegView? user)> Register(RegisterUserForm regUser)
         {
-            var regData = _mapper.Map<User>(regUser);
-            var response = await _repo.Register(regData);
-            return response.status > 0
-                ? (response.status, _mapper.Map<UserPostRegView>(response.user))
-                : (response.status, null);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                regUser.PhoneNumber = regUser.PhoneNumber.Trim();
+                var regData = _mapper.Map<User>(regUser);
+                var response = await _unitOfWork._authRepo.Register(regData);
+
+                await _unitOfWork.CommitTransactionAsync();
+
+                return response.status.Equals(ConstantEnum.RepoStatus.SUCCESS)
+                    ? (response.status, _mapper.Map<UserPostRegView>(response.user))
+                    : (response.status, null);
+            }
+            catch(Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new Exception(ex.Message);
+            }
+            
         }
     }
 }

@@ -17,8 +17,18 @@ namespace Repositories.Extension
             CreateMap<User, UserPostRegView>()
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name))
                 .ForMember(dest => dest.GenderTitle, opt => opt.MapFrom(src => src.Gender.GenderTitle))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.StatusName))
                 .ForMember(dest => dest.Password, opt => opt.Ignore());
+
+            CreateMap<User, UserView>()
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name))
+                .ForMember(dest => dest.GenderTitle, opt => opt.MapFrom(src => src.Gender.GenderTitle))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.StatusName))
+                .ForMember(dest => dest.Password, opt => opt.Ignore());
+
             CreateMap<RegisterUserForm, User>();
+
+            CreateMap<UpdateUserForm, User>();
         }
     }
 }

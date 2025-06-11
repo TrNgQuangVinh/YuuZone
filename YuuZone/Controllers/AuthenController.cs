@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Repositories.Constant;
 using Repositories.DTO.RequestDTO;
 using Services.Service;
 
@@ -40,7 +41,7 @@ namespace YuuZone.Controllers
             try
             {
                 var result = await _authServ.Register(regUser);
-                return result.status > 0
+                return result.status.Equals(ConstantEnum.RepoStatus.SUCCESS)
                     ? Ok(regUser)
                     : StatusCode(409, new
                     {

@@ -12,12 +12,13 @@ using System.Threading.Tasks;
 
 namespace Repositories.Repository.Implementation
 {
-    public class AuthenRepository : Repository<User>, IAuthenRepository
+    public class AuthenRepository : GenericRepository<User>, IAuthenRepository
     {
         private readonly IUserRepository _userRepo;
 
-        public AuthenRepository(YuuZoneDbContext dbContext) : base(dbContext)
+        public AuthenRepository(YuuZoneDbContext dbContext, IUserRepository userRepo) : base(dbContext)
         {
+            _userRepo = userRepo;
         }
 
         public async Task<User?> Login(string input, string password)
@@ -27,30 +28,35 @@ namespace Repositories.Repository.Implementation
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<(int status,User? user)> Register(User user)
+        public async Task<(string status,User? user)> Register(User user)
         {
-            /*
-             *  0 = account already exist
-             *  1 = account registered successfully
-             *  -1 = account register failure
-             */
-            var existingUser = await _dbContext.Users
-                .Where(x => x.Username.Equals(user.Username) 
-                || x.Email.Equals(user.Email) 
-                || x.PhoneNumber.Equals(user.PhoneNumber))
-                .FirstOrDefaultAsync();
-            if (existingUser != null) return (0,existingUser); //user already exist with same name, email or phone
+            try
+            {
+                var existingUser = await _userRepo.GetUserByUsernameAsync(user.Username);
+                if (existingUser != null) return ("User exists with the same username", existingUser);
+                existingUser = await _userRepo.GetUserByEmailAsync(user.Email);
+                if (existingUser != null) return ("User exists with the same username", existingUser);
+                existingUser = await _userRepo.GetUserByPhoneAsync(user.PhoneNumber);
+                if (existingUser != null) return ("User exists with the same username", existingUser);
 
-            if (user.RoleId == (int)ConstantEnum.RoleID.ADMIN)
-                user.StatusId = (int)ConstantEnum.StatusID.PENDING;
-            if (user.RoleId == (int)ConstantEnum.RoleID.CUSTOMER)
-                user.StatusId = (int)ConstantEnum.StatusID.ACTIVE;
-            user.Id = Guid.NewGuid();
-            var result = await CreateAsync(user);
-            if (result > 0)
-                return (result, user);
-            else
-                return (result, null);
+                if (user.RoleId == (int)ConstantEnum.RoleID.ADMIN)
+                    user.StatusId = (int)ConstantEnum.StatusID.PENDING;
+                if (user.RoleId == (int)ConstantEnum.RoleID.CUSTOMER)
+                    user.StatusId = (int)ConstantEnum.StatusID.ACTIVE;
+
+                user.Id = Guid.NewGuid();
+
+                var result = await CreateAsync(user);
+
+                if (result > 0)
+                    return (ConstantEnum.RepoStatus.SUCCESS, user);
+                else
+                    return (ConstantEnum.RepoStatus.FAILURE, null);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

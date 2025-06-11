@@ -20,8 +20,8 @@ namespace Repositories.DTO.RequestDTO
             ErrorMessage = "Password must contains a special character, a number, an uppercase and lowercase letter")]
         public string Password { get; set; }
         [Required]
-        [StringLength(12, ErrorMessage = "Not a typical phone number format", MinimumLength = 10)]
-        [RegularExpression(@"^\+?[\d\s\-\(\)\.]+$",
+        [RegularExpression(@"^0\d{9,12}$",
+        //[RegularExpression(@"^\+?[\d\s\-\(\)\.]+$",
             ErrorMessage = "Not a phone number format")]
         public string PhoneNumber { get; set; }
         [Required]

@@ -12,6 +12,6 @@ namespace Services.Service
     public interface IAuthenService
     {
         Task<UserPostRegView> Login(string? input, string password);
-        Task<(int status, UserPostRegView user)> Register(RegisterUserForm regUser);
+        Task<(string status, UserPostRegView user)> Register(RegisterUserForm regUser);
     }
 }

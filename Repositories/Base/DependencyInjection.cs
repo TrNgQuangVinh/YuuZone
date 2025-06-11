@@ -38,6 +38,8 @@ namespace Repositories.Base
 
             service.AddScoped<IAuthenRepository, AuthenRepository>();
             service.AddScoped<IUserRepository, UserRepository>();
+            service.AddScoped<UnitOfWork>();
+            service.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             return service;
         }
     }

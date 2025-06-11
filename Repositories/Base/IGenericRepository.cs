@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Repositories.Base
 {
-    public interface IRepository<T> where T : class
+    public interface IGenericRepository<T> where T : class
     {
         // ========== READ ==========
-        List<T> GetAll();
-        Task<List<T>> GetAllAsync();
+        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAllAsync();
 
         T? GetById(int id);
         Task<T?> GetByIdAsync(int id);
@@ -20,6 +21,9 @@ namespace Repositories.Base
 
         T? GetById(Guid code);
         Task<T?> GetByIdAsync(Guid code);
+
+        Task<IEnumerable<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includeProperties);
+        Task<T?> GetByIdWithIncludeAsync(int TId, string typeId, params Expression<Func<T, object>>[] includeProperties);
 
         // ========== CREATE ==========
         int Create(T entity);
