@@ -17,6 +17,9 @@ namespace Services
         {
             service.AddScoped<IAuthenService, AuthenService>();
             service.AddScoped<IUserService, UserService>();
+            service.AddScoped<IPostService, PostService>();
+            service.AddScoped<ICommentService, CommentService>();
+            service.AddScoped<ICommunityService, CommunityService>();
             service.AddAutoMapper(typeof(AutoMapperProfile));
             return service;
         }

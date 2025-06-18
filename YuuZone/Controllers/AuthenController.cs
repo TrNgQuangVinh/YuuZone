@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repositories.Constant;
-using Repositories.DTO.RequestDTO;
+using Repositories.DTO.RequestDTO.User;
 using Services.Service;
 
 namespace YuuZone.Controllers

@@ -12,18 +12,40 @@ namespace Repositories.Base
 {
     public class UnitOfWork
     {
+
         private readonly YuuZoneDbContext _context;
         private IDbContextTransaction? _transaction = null;
 
         public IAuthenRepository _authRepo { get; }
         public IUserRepository _userRepo { get; }
+        public IPostRepository _postRepo { get; }
+        public ICommunityRepository _communityRepo { get; }
+        public ICommentRepository _commentRepo { get; }
+        public IRoleRepository _roleRepo { get; }
+        public ITagRepository _tagRepo { get; }
+        public IGenderRepository _genderRepo { get; }
 
         //no need to construct _transaction
-        public UnitOfWork(YuuZoneDbContext context, IAuthenRepository authRepo, IUserRepository userRepo)
+
+        public UnitOfWork(YuuZoneDbContext context,
+           IAuthenRepository authRepo,
+           IUserRepository userRepo,
+           IPostRepository postRepo,
+           ICommunityRepository communityRepo,
+           ICommentRepository commentRepo,
+           IRoleRepository roleRepo,
+           ITagRepository tagRepo,
+           IGenderRepository genderRepo)
         {
             _context = context;
             _authRepo = authRepo;
             _userRepo = userRepo;
+            _postRepo = postRepo;
+            _communityRepo = communityRepo;
+            _commentRepo = commentRepo;
+            _roleRepo = roleRepo;
+            _tagRepo = tagRepo;
+            _genderRepo = genderRepo;
         }
 
         public void BeginTransaction()
@@ -93,6 +115,7 @@ namespace Repositories.Base
         }
 
         private bool _disposed = false;
+
         public virtual void Dispose(bool disposing)
         {
             if (!_disposed)

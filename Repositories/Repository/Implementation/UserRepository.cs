@@ -69,10 +69,11 @@ namespace Repositories.Repository.Implementation
                 
         }
 
-        public async Task<User?> UpdateUserAsync(Guid id, User user)
+        public async Task<User?> UpdateUserAsync(User user)
         {
             try
             {
+                /*
                 var existing = await GetByIdAsync(id);
                 if (existing == null)
                     return null;
@@ -81,6 +82,7 @@ namespace Repositories.Repository.Implementation
                 user.Password = existing.Password;
                 user.StatusId = existing.StatusId;
                 user.RoleId = existing.RoleId;
+                */
                 var result = await UpdateAsync(user);
 
                 return await GetByIdAsync(user.Id);

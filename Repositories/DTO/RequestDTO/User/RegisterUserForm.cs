@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.DTO.RequestDTO
+namespace Repositories.DTO.RequestDTO.User
 {
     public class RegisterUserForm
     {

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.Data;
 
@@ -11,9 +12,11 @@ using Repositories.Data;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(YuuZoneDbContext))]
-    partial class YuuZoneDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250617194228_FollowsMembersRating")]
+    partial class FollowsMembersRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,24 +53,6 @@ namespace Repositories.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("CommunityTag");
-                });
-
-            modelBuilder.Entity("Repositories.Data.Entities.CommentVote", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "CommentId");
-
-                    b.HasIndex("CommentId");
-
-                    b.ToTable("CommentVote");
                 });
 
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
@@ -143,24 +128,6 @@ namespace Repositories.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Repositories.Data.Entities.PostVote", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "PostId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostVote");
-                });
-
             modelBuilder.Entity("Repositories.Data.Entities.Status", b =>
                 {
                     b.Property<int>("Id")
@@ -225,6 +192,9 @@ namespace Repositories.Migrations
                     b.Property<DateTime>("PostedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -252,6 +222,9 @@ namespace Repositories.Migrations
 
                     b.Property<DateTime>("PostedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
@@ -408,25 +381,6 @@ namespace Repositories.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Repositories.Data.Entities.CommentVote", b =>
-                {
-                    b.HasOne("Repository.Data.Entities.Comment", "Voted")
-                        .WithMany("CommentVote")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Repository.Data.Entities.User", "Voters")
-                        .WithMany("CommentVote")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Voted");
-
-                    b.Navigation("Voters");
-                });
-
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
                 {
                     b.HasOne("Repositories.Data.Entities.Status", "Status")
@@ -436,25 +390,6 @@ namespace Repositories.Migrations
                         .IsRequired();
 
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("Repositories.Data.Entities.PostVote", b =>
-                {
-                    b.HasOne("Repository.Data.Entities.Post", "Voted")
-                        .WithMany("PostVote")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Repository.Data.Entities.User", "Voters")
-                        .WithMany("PostVote")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Voted");
-
-                    b.Navigation("Voters");
                 });
 
             modelBuilder.Entity("Repository.Data.Entities.Comment", b =>
@@ -555,16 +490,9 @@ namespace Repositories.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Repository.Data.Entities.Comment", b =>
-                {
-                    b.Navigation("CommentVote");
-                });
-
             modelBuilder.Entity("Repository.Data.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("PostVote");
                 });
 
             modelBuilder.Entity("Repository.Data.Entities.Role", b =>
@@ -574,11 +502,7 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repository.Data.Entities.User", b =>
                 {
-                    b.Navigation("CommentVote");
-
                     b.Navigation("Comments");
-
-                    b.Navigation("PostVote");
 
                     b.Navigation("Posts");
                 });

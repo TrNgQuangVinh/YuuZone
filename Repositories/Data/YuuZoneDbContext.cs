@@ -109,6 +109,72 @@ namespace Repositories.Data
                 .WithMany()
                 .HasForeignKey(c => c.StatusId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Community>()
+                .HasMany(c => c.Members)
+                .WithMany(c => c.Communities)
+                .UsingEntity<Dictionary<string, object>>("CommunityMember",
+                    j => j
+                    .HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                    .HasOne<Community>()
+                    .WithMany()
+                    .HasForeignKey("CommunityId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                    j =>
+                    {
+                        j.HasKey("CommunityId", "UserId");
+                        j.ToTable("CommunityMembers");
+                    });
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Followers)
+                .WithMany(u => u.Following)
+                .UsingEntity<Dictionary<string, object>>("UserFollow",
+                    j => j
+                    .HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey("FollowerId")
+                    .OnDelete(DeleteBehavior.Restrict),
+                    j => j
+                    .HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey("FollowingId")
+                    .OnDelete(DeleteBehavior.Restrict),
+                    j =>
+                    {
+                        j.HasKey("FollowerId", "FollowingId");
+                        j.ToTable("UserFollows");
+                    });
+
+            modelBuilder.Entity<PostVote>()
+                .HasKey(v => new { v.UserId, v.PostId });
+
+            modelBuilder.Entity<PostVote>()
+                .HasOne(v => v.Voters)
+                .WithMany(v => v.PostVote)
+                .HasForeignKey(pv => pv.UserId);
+
+            modelBuilder.Entity<PostVote>()
+                .HasOne(v => v.Voted)
+                .WithMany(v => v.PostVote)
+                .HasForeignKey(pv => pv.PostId);
+            
+            modelBuilder.Entity<CommentVote>()
+                .HasKey(v => new { v.UserId, v.CommentId });
+
+            modelBuilder.Entity<CommentVote>()
+                .HasOne(v => v.Voters)
+                .WithMany(v => v.CommentVote)
+                .HasForeignKey(pv => pv.UserId);
+
+            modelBuilder.Entity<CommentVote>()
+                .HasOne(v => v.Voted)
+                .WithMany(v => v.CommentVote)
+                .HasForeignKey(pv => pv.CommentId);
         }
     }
 }

@@ -40,8 +40,12 @@ namespace Repository.Data.Entities
         [ForeignKey("GenderId")]
         public Gender? Gender { get; set; }
 
-        public virtual ICollection<Post>? Posts { get; set; }
-        public virtual ICollection<Comment>? Comments { get; set; }
-
+        public virtual ICollection<Post?> Posts { get; set; }
+        public virtual ICollection<Comment?> Comments { get; set; }
+        public virtual ICollection<Community?> Communities { get; set; }
+        public virtual ICollection<User> Followers { get; set; } = new List<User>();
+        public virtual ICollection<User> Following { get; set; } = new List<User>();
+        public virtual ICollection<PostVote>? PostVote { get; set; }
+        public virtual ICollection<CommentVote>? CommentVote { get; set; }
     }
 }

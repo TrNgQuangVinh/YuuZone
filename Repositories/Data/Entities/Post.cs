@@ -28,6 +28,7 @@ namespace Repository.Data.Entities
         [ForeignKey("CommunityId")]
         public Community? Community { get; set; }
 
-        public virtual ICollection<Comment>? Comments { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
+        public virtual ICollection<PostVote>? PostVote { get; set; }
     }
 }

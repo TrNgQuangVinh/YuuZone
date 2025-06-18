@@ -2,8 +2,8 @@
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Base;
 using Repositories.Constant;
-using Repositories.DTO.RequestDTO;
-using Repositories.DTO.ResponseDTO;
+using Repositories.DTO.RequestDTO.User;
+using Repositories.DTO.ResponseDTO.User;
 using Repositories.Repository;
 using Repository.Data.Entities;
 using System;

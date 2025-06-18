@@ -1,5 +1,5 @@
-﻿using Repositories.DTO.RequestDTO;
-using Repositories.DTO.ResponseDTO;
+﻿using Repositories.DTO.RequestDTO.User;
+using Repositories.DTO.ResponseDTO.User;
 using Repository.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace Services.Service
 {
     public interface IAuthenService
     {
-        Task<UserPostRegView> Login(string? input, string password);
-        Task<(string status, UserPostRegView user)> Register(RegisterUserForm regUser);
+        Task<UserPostRegView?> Login(string? input, string password);
+        Task<(string status, UserPostRegView? user)> Register(RegisterUserForm regUser);
     }
 }

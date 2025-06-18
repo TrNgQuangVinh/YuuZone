@@ -26,5 +26,6 @@ namespace Repositories.Data.Entities
 
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<User> Members { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Repositories.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,5 +23,7 @@ namespace Repository.Data.Entities
 
         [ForeignKey("PostId")]
         public Post Post { get; set; }
+
+        public virtual ICollection<CommentVote>? CommentVote { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Base;
-using Repositories.DTO.RequestDTO;
-using Repositories.DTO.ResponseDTO;
+using Repositories.DTO.RequestDTO.User;
+using Repositories.DTO.ResponseDTO.User;
 using Repository.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,15 +25,29 @@ namespace Services.Service.Implementation
 
         public async Task<string> DeleteUserAsync(Guid id)
         {
-            return await _unitOfWork._userRepo.DeleteUserAsync(id);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var result = await _unitOfWork._userRepo.DeleteUserAsync(id);
+
+                await _unitOfWork.CommitTransactionAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new Exception(ex.Message);
+            }
         }
 
-        public async Task<List<UserView>> GetAllUsers()
+        public async Task<List<UserView?>> GetAllUsers()
         {
             var list = await _unitOfWork._userRepo.GetAllWithIncludeAsync(x => x.Role,
                                                     x => x.Gender,
                                                     x => x.Status);
-            return _mapper.Map<List<UserView>>(list.ToList());
+            return _mapper.Map<List<UserView?>>(list.ToList());
         }
 
         public async Task<UserView?> GetUserByEmailAsync(string input)
@@ -60,17 +74,35 @@ namespace Services.Service.Implementation
             return _mapper.Map<UserView>(result);
         }
 
-        public async Task<List<UserView>> GetUsersWithFilterAsync(string? fullName, string? titleName)
+        public async Task<List<UserView?>> GetUsersWithFilterAsync(string? fullName, string? titleName)
         {
             var list = await _unitOfWork._userRepo.GetUsersWithFilterAsync(fullName, titleName);
-            return _mapper.Map<List<UserView>>(list.ToList());
+            return _mapper.Map<List<UserView?>>(list.ToList());
         }
 
-        public async Task<UserView?> UpdateUserAsync(Guid id,UpdateUserForm userUpd)
+        public async Task<UserView?> UpdateUserAsync(Guid id, UpdateUserForm userUpd)
         {
-            var user = _mapper.Map<User>(userUpd);
-            user = await _unitOfWork._userRepo.UpdateUserAsync(id, user);
-            return _mapper.Map<UserView>(user);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var existing = _unitOfWork._userRepo.GetById(id);
+                if (existing == null)
+                    return null;
+
+                //partial mapping
+                var user = _mapper.Map(userUpd, existing);
+                user = await _unitOfWork._userRepo.UpdateUserAsync(user);
+
+                await _unitOfWork.CommitTransactionAsync();
+
+                return _mapper.Map<UserView>(user);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

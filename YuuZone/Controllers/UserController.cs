@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Constant;
-using Repositories.DTO.RequestDTO;
-using Repositories.DTO.ResponseDTO;
+using Repositories.DTO.RequestDTO.User;
+using Repositories.DTO.ResponseDTO.User;
 using Repository.Data.Entities;
 using Services.Service;
 
@@ -37,12 +37,7 @@ namespace YuuZone.Controllers
                 if (email.IsNullOrEmpty() && phone.IsNullOrEmpty() && userName.IsNullOrEmpty())
                     result = await _userServ.GetAllUsers();
 
-                return result == null
-                    ? StatusCode(500, new
-                    {
-                        Message = "Internal server error, check log"
-                    })
-                    : Ok(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -59,12 +54,7 @@ namespace YuuZone.Controllers
             try
             {
                 var result = await _userServ.GetUserByEmailAsync(email);
-                return result == null
-                    ? StatusCode(500, new
-                    {
-                        Message = "Internal server error, check log"
-                    })
-                    : Ok(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -81,12 +71,7 @@ namespace YuuZone.Controllers
             try
             {
                 var result = await _userServ.GetUserByPhoneAsync(phone);
-                return result == null
-                    ? StatusCode(500, new
-                    {
-                        Message = "Internal server error, check log"
-                    })
-                    : Ok(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -103,12 +88,7 @@ namespace YuuZone.Controllers
             try
             {
                 var result = await _userServ.GetUserByUsernameAsync(userName);
-                return result == null
-                    ? StatusCode(500, new
-                    {
-                        Message = "Internal server error, check log"
-                    })
-                    : Ok(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -125,12 +105,7 @@ namespace YuuZone.Controllers
             try
             {
                 var result = await _userServ.GetUsersWithFilterAsync(fullName, titleName);
-                return result == null
-                    ? StatusCode(500, new
-                    {
-                        Message = "Internal server error, check log"
-                    })
-                    : Ok(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -142,7 +117,7 @@ namespace YuuZone.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> Update([FromQuery] Guid id,UpdateUserForm user)
+        public async Task<IActionResult> Update([FromQuery] Guid id, [FromBody] UpdateUserForm user)
         {
             try
             {
@@ -150,7 +125,7 @@ namespace YuuZone.Controllers
                 return result == null
                     ? StatusCode(500, new
                     {
-                        Message = "Internal server error, check log"
+                        Message = "Update failed, check log"
                     })
                     : Ok(result);
             }
@@ -163,7 +138,7 @@ namespace YuuZone.Controllers
             }
         }
         
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

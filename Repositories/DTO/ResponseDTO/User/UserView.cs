@@ -8,19 +8,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.DTO.ResponseDTO
+namespace Repositories.DTO.ResponseDTO.User
 {
-    public class UserPostRegView
-    { 
-        public string Username { get; set; } 
-        public string TitleName { get; set; } 
-        public string Password { get; set; }   
+    public class UserView
+    {
+        public string Username { get; set; }
+        public string TitleName { get; set; }
+        public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Fullname { get; set; }
-        public string Status { get; set; }
+        public string? Address { get; set; }
+
+        public string? ImageAvatar { get; set; }
+        public string? ImageBanner { get; set; }
 
         public string RoleName { get; set; }
         public string GenderTitle { get; set; }
+
+        public string Status { get; set; }
     }
 }

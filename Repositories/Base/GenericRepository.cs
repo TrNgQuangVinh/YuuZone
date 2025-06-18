@@ -96,7 +96,7 @@ namespace Repositories.Base
         /// EXAMPLE HOW TO USE
         /// var foundCart = await _unitOfWork.CartRepository.GetByIdWithIncludeAsync(request.CartId, "CartId", cart => cart.ShoppingCartItems);
         /// </summary>
-        public async Task<T?> GetByIdWithIncludeAsync(int TId, string typeId, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T?> GetByIdWithIncludeAsync<TKey>(TKey TId, string typeId, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = Entities;
 
@@ -105,7 +105,7 @@ namespace Repositories.Base
                 query = query.Include(includeProperty);
             }
 
-            return await query.FirstOrDefaultAsync(entity => EF.Property<int>(entity, typeId) == TId);
+            return await query.FirstOrDefaultAsync(entity => EF.Property<TKey>(entity, typeId).Equals(TId));
 
         }
 

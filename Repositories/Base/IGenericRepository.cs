@@ -23,7 +23,7 @@ namespace Repositories.Base
         Task<T?> GetByIdAsync(Guid code);
 
         Task<IEnumerable<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includeProperties);
-        Task<T?> GetByIdWithIncludeAsync(int TId, string typeId, params Expression<Func<T, object>>[] includeProperties);
+        Task<T?> GetByIdWithIncludeAsync<TKey>(TKey TId, string typeId, params Expression<Func<T, object>>[] includeProperties);
 
         // ========== CREATE ==========
         int Create(T entity);

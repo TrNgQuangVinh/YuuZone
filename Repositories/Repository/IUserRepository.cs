@@ -15,7 +15,7 @@ namespace Repositories.Repository
         Task<User?> GetUserByPhoneAsync(string input);
         Task<IEnumerable<User>> GetUsersWithFilterAsync(string? fullName, string? titleName);
 
-        Task<User?> UpdateUserAsync(Guid id, User user);
+        Task<User?> UpdateUserAsync(User user);
         Task<string> DeleteUserAsync(Guid id);
     }
 }
