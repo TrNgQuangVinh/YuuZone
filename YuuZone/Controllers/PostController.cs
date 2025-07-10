@@ -39,6 +39,28 @@ namespace YuuZone.Controllers
             }
         }
 
+        [HttpGet("community")]
+        public async Task<IActionResult> GetPostFromCommunity(Guid? communityId, string? communityName)
+        {
+            try
+            {
+                var result = await _postServ.GetPostsFromCommunity(communityId, communityName);
+                return result == null
+                    ? StatusCode(500, new
+                    {
+                        Message = "Internal server error, check log"
+                    })
+                    : Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Message = ex.Message
+                });
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDetail(Guid id)
         {
@@ -89,8 +111,8 @@ namespace YuuZone.Controllers
             }
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> Update([FromQuery] Guid id, [FromBody] UpdatePostForm form)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdatePostForm form)
         {
             try
             {

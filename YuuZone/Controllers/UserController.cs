@@ -116,8 +116,8 @@ namespace YuuZone.Controllers
             }
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> Update([FromQuery] Guid id, [FromBody] UpdateUserForm user)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserForm user)
         {
             try
             {
