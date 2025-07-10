@@ -57,8 +57,8 @@ namespace YuuZone.Controllers
             }
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdateComment([FromQuery] Guid id, [FromBody] string content)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateComment(Guid id, string content)
         {
             try
             {
@@ -73,7 +73,8 @@ namespace YuuZone.Controllers
                 });
             }
         }
-        [HttpDelete]
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveComment(Guid id)
         {
             try
