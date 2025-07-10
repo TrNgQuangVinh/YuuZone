@@ -36,6 +36,13 @@ namespace Repositories.Base
             service.AddDbContext<YuuZoneDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            //Disable if not in use
+            /*
+            service.AddDbContext<YuuZoneDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+                .EnableSensitiveDataLogging());
+            */
+
             service.AddScoped<IAuthenRepository, AuthenRepository>();
             service.AddScoped<IUserRepository, UserRepository>();
             service.AddScoped<IPostRepository, PostRepository>();

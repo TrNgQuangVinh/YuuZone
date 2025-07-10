@@ -16,6 +16,7 @@ namespace Repositories.Base
         private readonly YuuZoneDbContext _context;
         private IDbContextTransaction? _transaction = null;
 
+        //only allow external code to consume, not change
         public IAuthenRepository _authRepo { get; }
         public IUserRepository _userRepo { get; }
         public IPostRepository _postRepo { get; }
@@ -47,6 +48,20 @@ namespace Repositories.Base
             _tagRepo = tagRepo;
             _genderRepo = genderRepo;
         }
+
+        #region
+        //Can also construct UoW like this
+        //Dont have to declare each repo in DepInj, only need to declare UoW and any other base class
+        //Guaranteed shared DbContext
+        /*
+        public UnitOfWork(YuuZoneDbContext context)
+        {
+            _authRepo    = new AuthenRepository(_context);
+            _userRepo = new UserRepository(_context);
+            _postRepo  = new PostRepository(_context);
+        }
+         */
+        #endregion
 
         public void BeginTransaction()
         {

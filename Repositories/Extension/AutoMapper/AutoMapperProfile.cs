@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using Repositories.Data.Entities;
 using Repositories.DTO.RequestDTO.Comment;
+using Repositories.DTO.RequestDTO.Community;
 using Repositories.DTO.RequestDTO.Post;
 using Repositories.DTO.RequestDTO.User;
 using Repositories.DTO.ResponseDTO.Comment;
+using Repositories.DTO.ResponseDTO.Community;
 using Repositories.DTO.ResponseDTO.Post;
+using Repositories.DTO.ResponseDTO.Role;
 using Repositories.DTO.ResponseDTO.User;
 using Repository.Data.Entities;
 using System;
@@ -12,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Extension
+namespace Repositories.Extension.AutoMapper
 {
     public class AutoMapperProfile : Profile
     {
@@ -23,6 +27,12 @@ namespace Repositories.Extension
                 .ForMember(dest => dest.GenderTitle, opt => opt.MapFrom(src => src.Gender.GenderTitle))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.StatusName))
                 .ForMember(dest => dest.Password, opt => opt.Ignore());
+
+            CreateMap<UserPostRegView, UserLoginView>();
+            
+            CreateMap<User, UserLoginView>()
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name))
+                .ForMember(dest => dest.JwtToken, opt => opt.Ignore());
 
             CreateMap<User, UserView>()
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name))
@@ -53,6 +63,12 @@ namespace Repositories.Extension
             CreateMap<UpdatePostForm, Post>()
                 .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.Status))
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<Role, RoleView>();
+
+            CreateMap<Community, CommunityView>();
+
+            CreateMap<CreateCommunityForm, Community>();
         }
     }
 }

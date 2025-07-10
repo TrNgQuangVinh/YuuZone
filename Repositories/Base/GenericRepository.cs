@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1;
 using Repositories.Data;
 using System;
 using System.Collections.Generic;
@@ -84,7 +85,7 @@ namespace Repositories.Base
 
             foreach (var includeProperty in includeProperties)
             {
-                query = query.Include(includeProperty);
+                query = query.Include(includeProperty).AsNoTracking();
             }
 
             return await query.ToListAsync();
@@ -102,11 +103,30 @@ namespace Repositories.Base
 
             foreach (var includeProperty in includeProperties)
             {
-                query = query.Include(includeProperty);
+                query = query.Include(includeProperty).AsNoTracking();
             }
 
             return await query.FirstOrDefaultAsync(entity => EF.Property<TKey>(entity, typeId).Equals(TId));
 
+        }
+
+        /// <summary>
+        /// Get the first element that matches the predicate
+        /// and Include the objects that matches the expression array
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="includeProperties">Include expression array</param>
+        /// <returns>A matching entity or null if not found"</returns>
+        public async Task<T?> GetFirstWithIncludeAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = Entities;
+
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.FirstOrDefaultAsync(predicate);
         }
 
         // ========== CREATE ==========

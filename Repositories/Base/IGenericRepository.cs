@@ -24,6 +24,7 @@ namespace Repositories.Base
 
         Task<IEnumerable<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includeProperties);
         Task<T?> GetByIdWithIncludeAsync<TKey>(TKey TId, string typeId, params Expression<Func<T, object>>[] includeProperties);
+        Task<T?> GetFirstWithIncludeAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
 
         // ========== CREATE ==========
         int Create(T entity);

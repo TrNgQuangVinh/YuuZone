@@ -361,7 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/YuuZone/appsettings.json
 /YuuZone/appsettings.Development.json
 /YuuZone/TextFile.txt
 /YuuZone/appsettings.Production.json
