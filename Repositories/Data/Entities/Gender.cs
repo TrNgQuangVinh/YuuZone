@@ -14,6 +14,6 @@ namespace Repositories.Data.Entities
         public int Id { get; set; }
         public string GenderTitle { get; set; }
 
-        public virtual ICollection<User>? Users { get; set; }
+        public virtual ICollection<User>? Users { get; set; } = new List<User>();
     }
 }

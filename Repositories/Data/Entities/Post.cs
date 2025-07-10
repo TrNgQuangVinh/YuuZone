@@ -22,13 +22,13 @@ namespace Repository.Data.Entities
         public int StatusId { get; set; }
 
         [ForeignKey("StatusId")]
-        public Status Status { get; set; }
+        public virtual Status Status { get; set; }
         [ForeignKey("UserId")]
-        public User? Author { get; set; }
+        public virtual User Author { get; set; }
         [ForeignKey("CommunityId")]
-        public Community? Community { get; set; }
+        public virtual Community Community { get; set; }
 
         public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
-        public virtual ICollection<PostVote>? PostVote { get; set; }
+        public virtual ICollection<PostVote>? PostVote { get; set; } = new List<PostVote>();
     }
 }

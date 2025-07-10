@@ -16,9 +16,9 @@ namespace Repositories.Data.Entities
         public int Value { get; set; }
 
         [ForeignKey("UserId")]
-        public User Voters { get; set; }
+        public virtual User Voters { get; set; }
         [ForeignKey("PostId")]
-        public Post Voted { get; set; }
+        public virtual Post Voted { get; set; }
 
 
     }

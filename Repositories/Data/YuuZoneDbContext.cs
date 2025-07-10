@@ -24,6 +24,8 @@ namespace Repositories.Data
         public DbSet<Community> Communities { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<PostVote> PostVotes { get; set; }
+        public DbSet<CommentVote> CommentVotes { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Status> Statuses { get; set; }
