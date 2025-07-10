@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Repositories.Constant;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,17 +20,17 @@ namespace Repositories.DTO.RequestDTO.User
         [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]).+$",
             ErrorMessage = "Password must contains a special character, a number, an uppercase and lowercase letter")]
         public string Password { get; set; }
-        [Required]
         [RegularExpression(@"^0\d{9,12}$",
         //[RegularExpression(@"^\+?[\d\s\-\(\)\.]+$",
             ErrorMessage = "Not a phone number format")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
         public string? Fullname { get; set; }
-        public int? RoleId { get; set; } = 2;
+        public int? RoleId { get; set; } = (int)ConstantEnum.RoleID.CUSTOMER;
         [Required]
-        public int GenderId { get; set; }
+        public int? GenderId { get; set; } = (int)ConstantEnum.GenderID.OTHER;
+        public string? GoogleId { get; set; }
     }
 }

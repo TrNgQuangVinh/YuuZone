@@ -27,6 +27,7 @@ namespace Repositories.Repository.Implementation
                 .Include(x => x.Role)
                 .Include(x => x.Gender)
                 .Include(x => x.Status)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
@@ -37,6 +38,7 @@ namespace Repositories.Repository.Implementation
                 .Include(x => x.Role)
                 .Include(x => x.Gender)
                 .Include(x => x.Status)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
@@ -47,6 +49,7 @@ namespace Repositories.Repository.Implementation
                 .Include(x => x.Role)
                 .Include(x => x.Gender)
                 .Include(x => x.Status)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
@@ -59,6 +62,7 @@ namespace Repositories.Repository.Implementation
                     .Include(x => x.Role)
                     .Include(x => x.Gender)
                     .Include(x => x.Status)
+                    .AsNoTracking()
                     .ToListAsync();
             else
             {

@@ -14,7 +14,7 @@ namespace Repositories.DTO.ResponseDTO.User
     {
         public string Username { get; set; }
         public string TitleName { get; set; }
-        public string Password { get; set; }
+        public string? Password { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Fullname { get; set; }
@@ -27,5 +27,6 @@ namespace Repositories.DTO.ResponseDTO.User
         public string GenderTitle { get; set; }
 
         public string Status { get; set; }
+        public bool IsGoogle { get; set; }
     }
 }

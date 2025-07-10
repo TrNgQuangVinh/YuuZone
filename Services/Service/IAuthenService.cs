@@ -11,7 +11,8 @@ namespace Services.Service
 {
     public interface IAuthenService
     {
-        Task<UserPostRegView?> Login(string? input, string password);
+        Task<(UserLoginView? login, UserPostRegView? register)> GoogleLogin(string email, string name, string googleId);
+        Task<UserLoginView?> Login(string? input, string password);
         Task<(string status, UserPostRegView? user)> Register(RegisterUserForm regUser);
     }
 }

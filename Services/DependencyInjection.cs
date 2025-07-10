@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Repositories.Extension;
+using Repositories.DTO;
+using Repositories.Extension.AutoMapper;
+using Repository.CustomFunctions.TokenHandler;
 using Services.Service;
 using Services.Service.Implementation;
 using System;
@@ -15,11 +17,15 @@ namespace Services
     {
         public static IServiceCollection AddServices(this IServiceCollection service, IConfiguration configuration)
         {
+            service.Configure<SMTPSettings>(configuration.GetSection("SMTPSettings"));
             service.AddScoped<IAuthenService, AuthenService>();
             service.AddScoped<IUserService, UserService>();
             service.AddScoped<IPostService, PostService>();
             service.AddScoped<ICommentService, CommentService>();
             service.AddScoped<ICommunityService, CommunityService>();
+            service.AddScoped<IRoleService, RoleService>();
+            service.AddScoped<IEmailService, EmailService>();
+            service.AddScoped<JWTTokenProvider>();
             service.AddAutoMapper(typeof(AutoMapperProfile));
             return service;
         }

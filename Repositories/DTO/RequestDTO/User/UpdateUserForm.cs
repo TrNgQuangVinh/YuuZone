@@ -23,7 +23,6 @@ namespace Repositories.DTO.RequestDTO.User
         public string? Fullname { get; set; }
         public string? Address { get; set; }
 
-
         public int? GenderId { get; set; }
     }
 }
