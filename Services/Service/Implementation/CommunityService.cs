@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Base;
 using Repositories.Constant;
@@ -17,11 +18,13 @@ namespace Services.Service.Implementation
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<CommunityService> _logger;
 
-        public CommunityService(UnitOfWork unitOfWork, IMapper mapper)
+        public CommunityService(UnitOfWork unitOfWork, IMapper mapper, ILogger<CommunityService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<(CommunityView community, string status)> CreateCommunity(CreateCommunityForm form)

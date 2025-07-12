@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Base;
 using Repositories.Constant;
@@ -18,11 +19,13 @@ namespace Services.Service.Implementation
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<PostService> _logger;
 
-        public PostService(UnitOfWork unitOfWork, IMapper mapper)
+        public PostService(UnitOfWork unitOfWork, IMapper mapper, ILogger<PostService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<List<PostView?>> GetAllPosts()

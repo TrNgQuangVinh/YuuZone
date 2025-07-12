@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Repositories.Base;
 using Repositories.DTO.RequestDTO.Comment;
 using Repositories.DTO.ResponseDTO.Comment;
@@ -15,11 +16,13 @@ namespace Services.Service.Implementation
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<CommentService> _logger;
 
-        public CommentService(UnitOfWork unitOfWork, IMapper mapper)
+        public CommentService(UnitOfWork unitOfWork, IMapper mapper, ILogger<CommentService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<List<CommentView?>> GetCommentsByPost(Guid id)

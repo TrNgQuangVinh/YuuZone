@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Repositories.Base;
 using Repositories.Constant;
 using Repositories.DTO.ResponseDTO.Comment;
@@ -17,11 +18,13 @@ namespace Services.Service.Implementation
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<RoleService> _logger;
 
-        public RoleService(UnitOfWork unitOfWork, IMapper mapper)
+        public RoleService(UnitOfWork unitOfWork, IMapper mapper, ILogger<RoleService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<string> AddRoles(string title)
