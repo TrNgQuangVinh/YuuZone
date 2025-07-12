@@ -38,7 +38,9 @@ namespace Repositories.Migrations
                 {
                     { 1, "Active" },
                     { 2, "Inactive" },
-                    { 3, "Pending" }
+                    { 3, "Pending" },
+                    { 1001, "Public" },
+                    { 1002, "Private" }
                 });
         }
 

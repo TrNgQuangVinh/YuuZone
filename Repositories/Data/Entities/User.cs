@@ -16,32 +16,42 @@ namespace Repository.Data.Entities
         [Required]
         public string Username { get; set; }
         public string? TitleName { get; set; }
-        [Required]
-        public string Password { get; set; }
-        [Required]
-        public string PhoneNumber { get; set; }
+        //Only nullable for google login, verify in services instead of model
+        public string? Password { get; set; }
+        public string? PhoneNumber { get; set; }
         [Required]
         public string Email { get; set; }
         public string? Fullname { get; set; }
         public string? Address { get; set; }
         public string? ImageAvatar { get; set; }
         public string? ImageBanner { get; set; }
+        [Required]
+        public bool IsGoogle { get; set; }
+        public string? GoogleId { get; set; }
+
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
 
         [Required]
         public int RoleId { get; set; }
         [Required]
         public int GenderId { get; set; }
+        [Required]
         public int StatusId { get; set; }
 
         [ForeignKey("StatusId")]
-        public Status Status { get; set; }
+        public virtual Status Status { get; set; }
         [ForeignKey("RoleId")]
-        public Role? Role { get; set; }
+        public virtual Role Role { get; set; }
         [ForeignKey("GenderId")]
-        public Gender? Gender { get; set; }
+        public virtual Gender Gender { get; set; }
 
-        public virtual ICollection<Post>? Posts { get; set; }
-        public virtual ICollection<Comment>? Comments { get; set; }
-
+        public virtual ICollection<Post?> Posts { get; set; } = new List<Post>();
+        public virtual ICollection<Comment?> Comments { get; set; } = new List<Comment>();
+        public virtual ICollection<Community?> Communities { get; set; } = new List<Community>();
+        public virtual ICollection<User> Followers { get; set; } = new List<User>();
+        public virtual ICollection<User> Following { get; set; } = new List<User>();
+        public virtual ICollection<PostVote>? PostVote { get; set; } = new List<PostVote>();
+        public virtual ICollection<CommentVote>? CommentVote { get; set; } = new List<CommentVote>();
     }
 }

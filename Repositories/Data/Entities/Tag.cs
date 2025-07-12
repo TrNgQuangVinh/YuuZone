@@ -13,6 +13,6 @@ namespace Repositories.Data.Entities
         public string Id { get; set; }
         public string TagTitle { get; set; }
 
-        public virtual ICollection<Community>? Communities { get; set; }
+        public virtual ICollection<Community>? Communities { get; set; } = new List<Community>();
     }
 }

@@ -1,0 +1,17 @@
+﻿1. Install the EF Core proxies package:
+
+dotnet add package Microsoft.EntityFrameworkCore.Proxies
+
+2. Enable lazy loading in DbContext:
+
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder.UseLazyLoadingProxies();
+}
+
+3. Mark navigation properties as virtual
+
+This is how to enable lazy loading in all entity here
+The virtual keyword has already been added to all the property of all the entities
+Now either enable lazy loading or leave it there
+Or specifically declare loading type (explicit or eager with .Include())

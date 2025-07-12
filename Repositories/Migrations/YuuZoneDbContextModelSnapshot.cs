@@ -22,6 +22,21 @@ namespace Repositories.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CommunityMember", b =>
+                {
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CommunityId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommunityMembers", (string)null);
+                });
+
             modelBuilder.Entity("CommunityTag", b =>
                 {
                     b.Property<Guid>("CommunitiesId")
@@ -35,6 +50,24 @@ namespace Repositories.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("CommunityTag");
+                });
+
+            modelBuilder.Entity("Repositories.Data.Entities.CommentVote", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "CommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("CommentVotes");
                 });
 
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
@@ -55,11 +88,9 @@ namespace Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageBanner")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageIcon")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -108,6 +139,24 @@ namespace Repositories.Migrations
                             Id = 3,
                             GenderTitle = "Other"
                         });
+                });
+
+            modelBuilder.Entity("Repositories.Data.Entities.PostVote", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "PostId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostVotes");
                 });
 
             modelBuilder.Entity("Repositories.Data.Entities.Status", b =>
@@ -274,19 +323,29 @@ namespace Repositories.Migrations
                     b.Property<int>("GenderId")
                         .HasColumnType("int");
 
+                    b.Property<string>("GoogleId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageAvatar")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageBanner")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsGoogle")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -312,6 +371,36 @@ namespace Repositories.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("UserFollow", b =>
+                {
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FollowingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("FollowerId", "FollowingId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("UserFollows", (string)null);
+                });
+
+            modelBuilder.Entity("CommunityMember", b =>
+                {
+                    b.HasOne("Repositories.Data.Entities.Community", null)
+                        .WithMany()
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Repository.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CommunityTag", b =>
                 {
                     b.HasOne("Repositories.Data.Entities.Community", null)
@@ -327,6 +416,25 @@ namespace Repositories.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Repositories.Data.Entities.CommentVote", b =>
+                {
+                    b.HasOne("Repository.Data.Entities.Comment", "Voted")
+                        .WithMany("CommentVote")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Repository.Data.Entities.User", "Voters")
+                        .WithMany("CommentVote")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Voted");
+
+                    b.Navigation("Voters");
+                });
+
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
                 {
                     b.HasOne("Repositories.Data.Entities.Status", "Status")
@@ -336,6 +444,25 @@ namespace Repositories.Migrations
                         .IsRequired();
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Repositories.Data.Entities.PostVote", b =>
+                {
+                    b.HasOne("Repository.Data.Entities.Post", "Voted")
+                        .WithMany("PostVote")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Repository.Data.Entities.User", "Voters")
+                        .WithMany("PostVote")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Voted");
+
+                    b.Navigation("Voters");
                 });
 
             modelBuilder.Entity("Repository.Data.Entities.Comment", b =>
@@ -411,6 +538,21 @@ namespace Repositories.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("UserFollow", b =>
+                {
+                    b.HasOne("Repository.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Repository.Data.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Repositories.Data.Entities.Community", b =>
                 {
                     b.Navigation("Posts");
@@ -421,9 +563,16 @@ namespace Repositories.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Repository.Data.Entities.Comment", b =>
+                {
+                    b.Navigation("CommentVote");
+                });
+
             modelBuilder.Entity("Repository.Data.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("PostVote");
                 });
 
             modelBuilder.Entity("Repository.Data.Entities.Role", b =>
@@ -433,7 +582,11 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repository.Data.Entities.User", b =>
                 {
+                    b.Navigation("CommentVote");
+
                     b.Navigation("Comments");
+
+                    b.Navigation("PostVote");
 
                     b.Navigation("Posts");
                 });
