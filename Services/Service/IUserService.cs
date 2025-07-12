@@ -12,6 +12,7 @@ namespace Services.Service
     public interface IUserService
     {
         Task<List<UserView?>> GetAllUsers();
+        Task<User?> GetUserByIdAsyncNoView(Guid id);
         Task<UserView?> GetUserByEmailAsync(string input);
         Task<UserView?> GetUserByUsernameAsync(string input);
         Task<UserView?> GetUserByPhoneAsync(string input);

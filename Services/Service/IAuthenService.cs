@@ -14,5 +14,6 @@ namespace Services.Service
         Task<(UserLoginView? login, UserPostRegView? register)> GoogleLogin(string email, string name, string googleId);
         Task<UserLoginView?> Login(string? input, string password);
         Task<(string status, UserPostRegView? user)> Register(RegisterUserForm regUser);
+        Task RefreshTokenAsync(string refreshToken, User user);
     }
 }

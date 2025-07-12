@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Base;
 using Repositories.DTO.RequestDTO.User;
@@ -16,11 +17,13 @@ namespace Services.Service.Implementation
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(UnitOfWork unitOfWork, IMapper mapper)
+        public UserService(UnitOfWork unitOfWork, IMapper mapper, ILogger<UserService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<string> DeleteUserAsync(Guid id)
@@ -56,6 +59,15 @@ namespace Services.Service.Implementation
                 return null;
             var result = await _unitOfWork._userRepo.GetUserByEmailAsync(input);
             return _mapper.Map<UserView>(result);
+        }
+
+        public async Task<User?> GetUserByIdAsyncNoView(Guid id)
+        {
+            var result = await _unitOfWork._userRepo.GetByIdWithIncludeAsync(id, "Id",
+                x => x.Role,
+                x => x.Gender,
+                x => x.Status);
+            return result;
         }
 
         public async Task<UserView?> GetUserByPhoneAsync(string input)

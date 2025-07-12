@@ -29,6 +29,9 @@ namespace Repository.Data.Entities
         public bool IsGoogle { get; set; }
         public string? GoogleId { get; set; }
 
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
+
         [Required]
         public int RoleId { get; set; }
         [Required]

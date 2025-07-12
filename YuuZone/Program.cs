@@ -5,7 +5,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories.Base;
+using Serilog;
 using Services;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
 
@@ -16,12 +18,25 @@ namespace YuuZone
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             // Add services to the container.
+
+            //Remove default providers
+            builder.Logging.ClearProviders();
+
+            //Use Serilog with config from appsettings.json
+            builder.Host.UseSerilog((ctx, services, config) =>
+            {
+                config
+                    .ReadFrom.Configuration(ctx.Configuration)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console()
+                    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day);
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -95,7 +110,8 @@ namespace YuuZone
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = builder.Configuration["JWT:Issuer"],
                         ValidAudience = builder.Configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+                        NameClaimType = JwtRegisteredClaimNames.Name  // maps "name" → User.Identity.Name
                     };
                 })
                 .AddGoogle(google =>
@@ -158,6 +174,8 @@ namespace YuuZone
 
             //navigate to this path to check environment
             app.MapGet("/env", (IWebHostEnvironment env) => env.EnvironmentName);
+
+            Log.Information("Starting logger...");
 
             app.Run();
         }

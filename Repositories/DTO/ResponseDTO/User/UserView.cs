@@ -20,6 +20,9 @@ namespace Repositories.DTO.ResponseDTO.User
         public string Fullname { get; set; }
         public string? Address { get; set; }
 
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
+
         public string? ImageAvatar { get; set; }
         public string? ImageBanner { get; set; }
 

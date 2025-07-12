@@ -14,6 +14,8 @@ namespace Repositories.DTO.ResponseDTO.User
         public string IsGoogle { get; set; }
 
         public string RoleName { get; set; }
+
         public string JwtToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

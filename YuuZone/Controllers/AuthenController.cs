@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Constant;
+using Repositories.DTO;
 using Repositories.DTO.RequestDTO.User;
+using Repository.CustomFunctions.TokenHandler;
 using Services.Service;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace YuuZone.Controllers
 {
@@ -14,25 +19,60 @@ namespace YuuZone.Controllers
     public class AuthenController : ControllerBase
     {
         private readonly IAuthenService _authServ;
+        private readonly IUserService _userServ;
+        private readonly JWTTokenProvider _jwt;
+        private readonly IConfiguration _config;
 
-        public AuthenController(IAuthenService authServ)
+        public AuthenController(IAuthenService authServ, IUserService userServ, JWTTokenProvider jwt, IConfiguration config)
         {
             _authServ = authServ;
-        }
-        [Authorize(Roles = "1")]
-        [HttpGet("jwtRoles1")]
-        [SwaggerOperation(Summary = "Should throw 401 Unauth if no jwt, 403 Forbid if role is not 1")]
-        public async Task<IActionResult> JWTTestRoles()
-        {
-            return Ok("Welcome back Captain");
+            _userServ = userServ;
+            _jwt = jwt;
+            _config = config;
         }
 
-        [Authorize]
-        [HttpGet("jwt")]
-        [SwaggerOperation(Summary = "Should throw 401 Unauth if no jwt")]
-        public async Task<IActionResult> JWTTest()
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginUserForm form)
         {
-           return Ok("Hello User");
+            try
+            {
+                var result = await _authServ.Login(form.emailOrUsername, form.password);
+                return result == null
+                    ? NotFound(new
+                    {
+                        Message = "Account not found"
+                    })
+                    : Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterUserForm regUser)
+        {
+            try
+            {
+                var result = await _authServ.Register(regUser);
+                return result.status.Equals(ConstantEnum.RepoStatus.SUCCESS)
+                    ? Ok(regUser)
+                    : StatusCode(409, new
+                    {
+                        Message = "Username, Email or Phone number already registered!"
+                    });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Message = ex.Message
+                });
+            }
         }
 
         /// <param name="localURL">https://localhost:7184/Authen/login/google</param>
@@ -84,48 +124,25 @@ namespace YuuZone.Controllers
             }
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(string? emailOrUsername, string password)
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokensRequest form)
         {
-            try
-            {
-                var result = await _authServ.Login(emailOrUsername, password);
-                return result == null
-                    ? NotFound(new
-                    {
-                        Message = "Account not found"
-                    })
-                    : Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    Message = ex.Message
-                });
-            }
-        }
+            var principal = _jwt.GetPrincipalFromExpiredToken(form.AccessToken);
+            if (principal == null) return BadRequest("Invalid access token");
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserForm regUser)
-        {
-            try
-            {
-                var result = await _authServ.Register(regUser);
-                return result.status.Equals(ConstantEnum.RepoStatus.SUCCESS)
-                    ? Ok(regUser)
-                    : StatusCode(409, new
-                    {
-                        Message = "Username, Email or Phone number already registered!"
-                    });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    Message = ex.Message
-                });
-            }
+            var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userServ.GetUserByIdAsyncNoView(Guid.Parse(userId));
+
+            if (user == null || user.RefreshToken != form.RefreshToken || user.RefreshTokenExpiry < DateTime.UtcNow)
+                return Unauthorized();
+
+            // Call the method here
+            var tokens = _jwt.RefreshTokenAsync(user);
+
+            // Update user's refresh token in DB
+            await _authServ.RefreshTokenAsync(tokens.RefreshToken, user);
+
+            return Ok(tokens);
         }
     }
 }
